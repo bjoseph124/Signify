@@ -1,0 +1,7 @@
+{
+  "reference": "NumPy float32 dense evaluation against TypeScript browser inference on actual extracted image landmarks",
+  "examples": 669,
+  "top1Disagreements": 0,
+  "maximumScoreDifference": 6.18351753078894e-07,
+  "weightSha256": "01c13bd7803114a40e3a847ec9868a46b8aacb9373e2fb0f079ccbafa9af5cc0"
+}

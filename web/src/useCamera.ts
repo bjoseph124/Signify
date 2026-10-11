@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { NO_HAND, UNKNOWN } from './classifier';
+import type { CaptureFrame } from './alphabet/capture';
 
 type Landmark = { x: number; y: number; z: number };
 type Status = 'idle' | 'requesting' | 'loading' | 'live' | 'error';
@@ -12,7 +13,7 @@ export function cameraError(error: unknown): string {
   return error instanceof Error ? error.message : 'Something went wrong. Please try again.';
 }
 
-export function useCamera() {
+export function useCamera(researchMode = false) {
   const video = useRef<HTMLVideoElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [status, setStatus] = useState<Status>('idle');
@@ -20,6 +21,9 @@ export function useCamera() {
   const [error, setError] = useState('');
   const [fps, setFps] = useState(0);
   const [aspect, setAspect] = useState(4 / 3);
+  const [researchFrame, setResearchFrame] = useState<CaptureFrame|null>(null);
+  const frameListener = useRef<((frame:CaptureFrame)=>void)|null>(null);
+  const subscribeFrames = useCallback((listener:((frame:CaptureFrame)=>void)|null) => { frameListener.current = listener; }, []);
   const generation = useRef(0);
   const resources = useRef<{ stream?: MediaStream; worker?: Worker; raf?: number; timer?: ReturnType<typeof setTimeout> }>({});
 
@@ -103,10 +107,11 @@ export function useCamera() {
           draw(data.landmarks);
           if (previousResult) setFps(Math.round(1000 / (lastResult - previousResult)));
           previousResult = lastResult;
+          if (researchMode && data.researchFrame) { setResearchFrame(data.researchFrame); frameListener.current?.(data.researchFrame); }
         }
       };
       worker.onerror = () => fail('The hand-tracking worker could not run. Refresh the page or try a newer browser.');
-      worker.postMessage({ type: 'init' });
+      worker.postMessage({ type: 'init', researchMode });
       const tick = async (now: number) => {
         if (!current()) return;
         resources.current.raf = requestAnimationFrame(tick);
@@ -122,7 +127,7 @@ export function useCamera() {
       };
       resources.current.raf = requestAnimationFrame(tick);
     } catch (e) { fail(cameraError(e)); }
-  }, [release]);
+  }, [release, researchMode]);
   const [handVisible, setHandVisible] = useState(false);
   useEffect(() => {
     const hidden = () => { if (document.hidden) stop(); };
@@ -132,5 +137,5 @@ export function useCamera() {
     window.addEventListener('keydown', key);
     return () => { release(); document.removeEventListener('visibilitychange', hidden); window.removeEventListener('pagehide', stop); window.removeEventListener('keydown', key); };
   }, [release, stop]);
-  return { video, canvas, status, label, error, fps, aspect, handVisible, start, stop };
+  return { video, canvas, status, label, error, fps, aspect, handVisible, start, stop, researchFrame, subscribeFrames };
 }

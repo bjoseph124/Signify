@@ -2,6 +2,8 @@
 
 The separate **Signify web app** is in [`web/`](web/README.md): React + TypeScript, browser-local MediaPipe tracking, and Vercel deployment instructions. The Python demo below is preserved.
 
+Live Signify: **https://signify-tau-six.vercel.app/**. Full-alphabet work is isolated on `feat/full-alphabet-research`; the six-letter version remains the default. See [`research/README.md`](research/README.md) for the real-image evaluation, experimental J/Z detector, and missing training-data requirements. All 26 letters are not yet verified.
+
 A small, local Python webcam playground for **six static ASL letters: F, I, L, V, W, Y**. OpenCV mirrors the video; MediaPipe tracks and draws 21 hand landmarks; conservative geometry rules suggest a letter. No account, training, recording, uploads, or runtime downloads.
 
 This is an experimental fingerspelling practice demo, not a full alphabet classifier or sign-language translator. Rules have no calibrated confidence, so none is displayed. Unknown shapes are rejected where possible, but unsupported letters and other gestures can still resemble supported shapes. Real signing accuracy has not been measured.

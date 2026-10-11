@@ -75,3 +75,30 @@ test('hiding the page releases the camera', async ({page}) => {
   await expect(page.getByRole('button',{name:'Start Camera'})).toBeVisible();
   expect(await page.evaluate(()=>(window as any).__tracks.every((t:MediaStreamTrack)=>t.readyState==='ended'))).toBe(true);
 });
+
+test('research lab is opt-in and explicit recording downloads only local landmark data', async ({page}) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading',{name:'Help the alphabet grow.'})).toHaveCount(0);
+  await page.goto('/?lab=alphabet');
+  await expect(page.getByRole('heading',{name:'Help the alphabet grow.'})).toBeVisible();
+  await page.getByText('Record a local evaluation sample',{exact:true}).click();
+  await expect(page.getByRole('button',{name:'Record 4 seconds'})).toBeDisabled();
+  await page.getByRole('button',{name:'Start Camera'}).click();
+  await expect(page.getByText('Camera live',{exact:true})).toBeVisible({timeout:45_000});
+  await expect(page.locator('.motion-readout')).toContainText('Unknown');
+  await page.getByLabel('Anonymous signer ID').fill('test-signer');
+  await page.getByRole('button',{name:'Record 4 seconds'}).click();
+  await page.waitForTimeout(500);
+  await page.getByRole('button',{name:'Finish sample'}).click();
+  await expect(page.getByRole('status')).toContainText('Nothing uploaded');
+  const downloaded=page.waitForEvent('download');
+  await page.getByRole('button',{name:'Download sample'}).click();
+  const download=await downloaded;
+  const stream=await download.createReadStream();const chunks=[];
+  for await(const chunk of stream!)chunks.push(chunk);
+  const data=JSON.parse(Buffer.concat(chunks).toString());
+  expect(data.schema).toBe('signify-landmarks-v1');expect(data.label).toBe('J');
+  expect(data.frames.length).toBeGreaterThan(0);expect(data.frames.every((f:any)=>f.points===null)).toBe(true);
+  await page.getByRole('button',{name:'Stop Camera'}).click();
+  await expect(page.locator('.motion-readout')).toContainText('Unknown');
+});

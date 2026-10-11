@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { SUPPORTED, UNKNOWN } from './classifier';
 import { useCamera } from './useCamera';
+import { AlphabetLab } from './alphabet/AlphabetLab';
 
 const hints: Record<string, { name: string; cue: string }> = {
   F: { name: 'Make a little circle', cue: 'Touch your index fingertip to your thumb. Extend your other three fingers.' },
@@ -14,7 +15,8 @@ function HandArt() {
   return <svg viewBox="0 0 180 210" fill="none" aria-hidden="true"><path d="M49 111V58c0-17 21-17 21 0v37-61c0-17 22-17 22 0v59-68c0-17 22-17 22 0v72-50c0-16 22-16 22 0v89c0 42-21 65-57 65-28 0-40-18-52-42L13 127c-8-17 9-29 21-15l15 18" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/><path d="m56 148 27-31 29 27M83 117l9-24m-9 24-13-22m13 22 31-20" stroke="currentColor" strokeWidth="2" opacity=".5"/>{[[56,148],[83,117],[112,144],[92,93],[70,95],[114,97]].map(([cx,cy])=><circle key={`${cx}${cy}`} cx={cx} cy={cy} r="5" fill="currentColor"/>)}</svg>;
 }
 export default function App() {
-  const camera = useCamera();
+  const researchMode = new URLSearchParams(window.location.search).get('lab') === 'alphabet';
+  const camera = useCamera(researchMode);
   const [selected, setSelected] = useState('L');
   const active = ['requesting', 'loading', 'live'].includes(camera.status);
   const live = camera.status === 'live';
@@ -42,6 +44,7 @@ export default function App() {
       <section className="letter-section" aria-labelledby="letters-heading"><div className="section-heading"><div><span className="eyebrow">START SMALL. SIGN SOMETHING.</span><h2 id="letters-heading">Pick a letter to try<span>.</span></h2></div><span className="subset-pill">6 supported letters</span></div><div className="letter-picker">{SUPPORTED.map(letter => <button key={letter} className={`letter-tile ${selected === letter ? 'selected' : ''}`} aria-pressed={selected === letter} onClick={() => setSelected(letter)}><span>{letter}</span><span>{letter === 'F' ? 'The circle' : letter === 'I' ? 'The pinky' : letter === 'L' ? 'The angle' : letter === 'V' ? 'The peace' : letter === 'W' ? 'The trio' : 'The stretch'}</span><span className="tile-arrow" aria-hidden="true">↗</span></button>)}</div><div className="letter-hint" aria-live="polite"><span className="hint-letter">{selected}</span><div><h3>{hints[selected].name}</h3><p>{hints[selected].cue}</p></div><span className="hint-note">Either hand works.</span></div></section>
       <section id="how-it-works" className="how-section"><div><span className="eyebrow">A LITTLE BEHIND THE MAGIC</span><h2>Your browser does <br/>the heavy lifting.</h2></div><div><h3><span>01</span> Find your hand</h3><p>MediaPipe tracks 21 points on your hand, right here in your browser. No video uploads or recordings.</p></div><div><h3><span>02</span> Find your letter</h3><p>Our original hand-shape rules recognize F, I, L, V, W, and Y. A short frame vote keeps the result steady.</p></div></section>
       <div className="limitations"><span aria-hidden="true">ⓘ</span><p>A practice experiment, not a full ASL translator. Other letters are unsupported, including motion letters J and Z. Similar shapes can be confused; no accuracy or confidence score is claimed.</p></div>
+      {researchMode && <AlphabetLab live={live} frame={camera.researchFrame} subscribe={camera.subscribeFrames}/>}
     </main><footer><span className="footer-brand">signify.</span><p>Small gestures. New connections.</p><span>Made for curious hands <span aria-hidden="true">✳</span></span></footer>
   </div>;
 }

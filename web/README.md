@@ -1,5 +1,9 @@
 # Signify — browser ASL playground
 
+**Live:** https://signify-tau-six.vercel.app/
+
+**Alphabet upgrade status:** the default remains F/I/L/V/W/Y, confirmed working by the owner on their webcam. A 24-letter pretrained candidate was evaluated on 720 real photographs and rejected (36.8% top-1 accuracy). Full 26-letter recognition is **not verified or enabled**. The separate `feat/full-alphabet-research` branch adds reproducible evaluation and an opt-in `?lab=alphabet` panel for experimental J/Z trajectories and local landmark collection. See [the research report and training plan](../research/README.md). This branch is not merged into production.
+
 React + TypeScript + Vite, with MediaPipe **Tasks Vision HandLandmarker** in a dedicated worker. The original Python application remains at the repository root and runs independently.
 
 The six-letter classifier is a direct TypeScript port of `../recognition.py`: **F, I, L, V, W, Y**. This does **not** use MediaPipe's basic Gesture Recognizer. Tracking supplies 21 landmarks; our geometry rules produce the letters.
@@ -61,6 +65,8 @@ HTTPS (or localhost) is mandatory for browser webcam access. The Vercel deployme
 ## Honest limitations
 
 This is an experimental static handshape demo, **not a full ASL alphabet model or translator**. Only F/I/L/V/W/Y are supported. J and Z require movement and remain unsupported. The initial J handshape may appear as I. Unsupported signs and arbitrary poses can look like a supported shape and be misclassified.
+
+On the research branch, J/Z have a separate unvalidated motion-candidate readout in the opt-in lab. It does not change the main letter prediction. No rejected pretrained weights are bundled in production. The default webcam path remains local and unrecorded; the lab records bounded landmark-only clips **only when explicitly requested**, offers a local JSON download, and never uploads them.
 
 No letter probabilities or confidence scores exist; none are shown. The tracking thresholds are internal MediaPipe thresholds, not letter confidence. Accuracy has not been measured with real signers. Lighting, angle, hand size, occlusion, and signing variation matter. Python and Tasks Vision use different tracking APIs, so identical classifier logic does not guarantee identical live landmark estimates.
 
