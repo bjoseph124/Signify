@@ -1,0 +1,5 @@
+# This release bundles the Hands model and supports Python 3.9–3.12 on macOS.
+mediapipe==0.10.21
+# Includes OpenCV's GUI modules; do not also install opencv-python/headless.
+opencv-contrib-python==4.11.0.86
+numpy==1.26.4

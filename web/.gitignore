@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.vercel/
+public/wasm/
+public/tracker.worker.js
+test-results/
+playwright-report/
+.env*
+!.env.example
