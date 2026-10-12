@@ -1,4 +1,6 @@
-# Signify — browser ASL playground
+# Signify — development guide
+
+[Live application](https://signify-tau-six.vercel.app/) · [Project overview](../README.md)
 
 React + TypeScript + Vite, with MediaPipe **Tasks Vision HandLandmarker** in a dedicated worker. The original Python application remains at the repository root and runs independently.
 
@@ -27,7 +29,7 @@ No environment variables, API keys, Python server, database, or paid inference s
 
 ## Deployment through GitHub and Vercel
 
-The intended repository name is **Signify**. Commit both versions, keeping `.venv`, `node_modules`, `dist`, secrets, and test artifacts excluded by the included ignore files.
+The application is deployed from the `main` branch of [bjoseph124/Signify](https://github.com/bjoseph124/Signify). The existing Vercel project uses the settings below. No deployment configuration changes are needed for public release.
 
 1. Push this repository to GitHub.
 2. Open [Vercel New Project](https://vercel.com/new), sign in, and import **Signify** from GitHub. Grant Vercel access to that repository if needed.
@@ -62,7 +64,7 @@ HTTPS (or localhost) is mandatory for browser webcam access. The Vercel deployme
 
 This is an experimental static handshape demo, **not a full ASL alphabet model or translator**. Only F/I/L/V/W/Y are supported. J and Z require movement and remain unsupported. The initial J handshape may appear as I. Unsupported signs and arbitrary poses can look like a supported shape and be misclassified.
 
-No letter probabilities or confidence scores exist; none are shown. The tracking thresholds are internal MediaPipe thresholds, not letter confidence. Accuracy has not been measured with real signers. Lighting, angle, hand size, occlusion, and signing variation matter. Python and Tasks Vision use different tracking APIs, so identical classifier logic does not guarantee identical live landmark estimates.
+No letter probabilities or confidence scores exist; none are shown. The tracking thresholds are internal MediaPipe thresholds, not letter confidence. The six letters have been manually smoke-tested on the live application, but representative real-signer accuracy has not been established. Lighting, angle, hand size, occlusion, and signing variation matter. Python and Tasks Vision use different tracking APIs, so identical classifier logic does not guarantee identical live landmark estimates.
 
 Try a current desktop Chrome, Edge, or Safari. Browser support depends on WebAssembly, workers, OffscreenCanvas, and createImageBitmap. Browser tests here use Chrome; Safari/iOS/Android and physical webcams require separate testing. A responsive layout alone does not establish mobile tracking compatibility.
 
@@ -78,7 +80,7 @@ Browser tests use installed Google Chrome and a simulated webcam, never the phys
 
 Coverage includes Python/TypeScript rule parity, prediction smoothing, responsive layout, hints, actual local WASM/model initialization and inference on a fake camera, permission denial, late permission cleanup, model-loading failure, Stop, and restart. These verify application behavior, **not ASL accuracy**.
 
-Verified locally on the development Mac: production build, 32 unit tests, Chrome browser tests, and desktop/mobile screenshot inspection. The Python files and tests remain intact. Physical hand recognition and non-Chrome browser behavior still require hands-on validation.
+Verified locally on the development Mac: production build, 32 unit tests, Chrome browser tests, and desktop/mobile screenshot inspection. The Python files and tests remain intact. The owner has confirmed all six letters on the deployed webcam demo. Broader signer, device, and non-Chrome browser testing remains necessary.
 
 Before announcing a public release, check both hands and all supported letters on physical desktop/mobile cameras, denied/revoked permissions, Stop/Esc, tab switching, slow networks, and stable letter transitions. Verify that your deployment has no sign-in gate.
 

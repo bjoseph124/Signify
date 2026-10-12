@@ -3,3 +3,25 @@ __pycache__/
 *.pyc
 .DS_Store
 preview.png
+
+# Local configuration and credentials (examples may be committed deliberately)
+.env
+.env.*
+!.env.example
+.vercel/
+*.pem
+*.key
+
+# Dependencies and generated output at any project level
+node_modules/
+dist/
+coverage/
+test-results/
+playwright-report/
+*.log
+.pytest_cache/
+
+# Local research downloads left when switching branches
+research/.cache/
+research/candidates/
+research/captures/
