@@ -1,0 +1,5 @@
+# Optional research dependencies. Not used by the browser or production build.
+numpy==1.26.4
+scikit-learn==1.6.1
+threadpoolctl==3.7.0
+joblib==1.5.3

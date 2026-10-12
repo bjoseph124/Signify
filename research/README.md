@@ -1,5 +1,7 @@
 # Full-alphabet research: replacement NOT ready
 
+**Latest bounded follow-up:** [one lightweight classifier training attempt](STATIC-ATTEMPT.md) on existing CC0 images. The normalized-landmark model reached 45.0% external-image accuracy and did not beat the reliable six-letter baseline on shared-letter coverage. It is saved for research only; no production replacement or merge.
+
 Live six-letter application: **https://signify-tau-six.vercel.app/**.
 Feature branch: `feat/full-alphabet-research`. Do not merge or change the default recognizer based on these prototypes.
 

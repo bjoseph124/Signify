@@ -2,6 +2,8 @@
 
 **Live:** https://signify-tau-six.vercel.app/
 
+The follow-up [single lightweight training experiment](../research/STATIC-ATTEMPT.md) also failed to justify a replacement: 45.0% accuracy on 720 external static-letter photographs, with only 65.9% precision among threshold-accepted predictions. Its learned weights remain outside the website. The working six-letter classifier and separate J/Z experiment are unchanged.
+
 **Alphabet upgrade status:** the default remains F/I/L/V/W/Y, confirmed working by the owner on their webcam. A 24-letter pretrained candidate was evaluated on 720 real photographs and rejected (36.8% top-1 accuracy). Full 26-letter recognition is **not verified or enabled**. The separate `feat/full-alphabet-research` branch adds reproducible evaluation and an opt-in `?lab=alphabet` panel for experimental J/Z trajectories and local landmark collection. See [the research report and training plan](../research/README.md). This branch is not merged into production.
 
 React + TypeScript + Vite, with MediaPipe **Tasks Vision HandLandmarker** in a dedicated worker. The original Python application remains at the repository root and runs independently.

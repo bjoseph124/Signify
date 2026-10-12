@@ -1,0 +1,14 @@
+{
+  "source": "https://www.kaggle.com/datasets/ayuraj/asl-dataset",
+  "version": 1,
+  "license": "CC0: Public Domain",
+  "archiveSHA256": "780fab7aac5ed147733cdbacb7714b4dd5aa44664607ef8d784baad6b24e157d",
+  "splitCounts": {
+    "train": 1315,
+    "validation": 120,
+    "heldout_group": 240,
+    "external_test": 720
+  },
+  "splitNote": "hand1/2/3 train, hand4 validation, hand5 held out. Filename groups are NOT verified signer IDs.",
+  "deduplication": "Exact SHA-256 within training source; exclude duplicate nested archive copy; assert no exact overlap with external test."
+}
